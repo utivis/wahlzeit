@@ -9,6 +9,18 @@ public class Location implements Serializable {
 	private String name;
 	private Coordinate coordinate;
 
+	
+	public Location() {
+		// empty
+	}
+	
+	
+	public Location(String name, Coordinate coordinate) {
+		this.name = name;
+		this.coordinate = coordinate;
+	}
+	
+	
 	/**
 	 * @methodtype get
 	 * @return the name
@@ -17,6 +29,7 @@ public class Location implements Serializable {
 		return name;
 	}
 
+	
 	/**
 	 * @methodtype set
 	 * @param name the name to set
@@ -25,6 +38,7 @@ public class Location implements Serializable {
 		this.name = name;
 	}
 
+	
 	/**
 	 * @methodtype get
 	 * @return the coordinate
@@ -33,12 +47,37 @@ public class Location implements Serializable {
 		return coordinate;
 	}
 
+	
 	/**
 	 * @methodtype set
 	 * @param coordinate the coordinate to set
 	 */
 	public void setCoordinate(Coordinate coordinate) {
 		this.coordinate = coordinate;
+	}
+	
+	
+	/**
+	 * @methodtype comparison
+	 */
+	public boolean isEqual(Location other) {
+		return (other != null) && name.equals(other.name) && coordinate.equals(other.coordinate);
+	}
+	
+	
+	/**
+	 * @methodtype comparison
+	 */
+	@Override
+	public boolean equals(Object other) {
+		return (other instanceof Location) && isEqual((Location)other);
+	}
+	
+	/**
+	 * @methodtype conversion
+	 */
+	public String asString() {
+		return "Location: " + name;
 	}
 	
 }

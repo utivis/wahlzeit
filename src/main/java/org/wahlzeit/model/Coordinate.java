@@ -33,21 +33,33 @@ public class Coordinate implements Serializable {
 	}
 	
 	
+	/**
+	 * @methodtype get
+	 */
 	public double getLatitude() {
 		return latitude;
 	}
 	
 	
+	/**
+	 * @methodtype set
+	 */
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 	
 	
+	/**
+	 * @methodtype get
+	 */
 	public double getLongitude() {
 		return longitude;
 	}
 	
 	
+	/**
+	 * @methodtype set
+	 */
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
@@ -70,22 +82,27 @@ public class Coordinate implements Serializable {
 	}
 	
 	
-	@Override
-	public boolean equals(Object other) {
-		if (other == null) return false;
-		else if (this == other) return true;
-		else if (other instanceof Coordinate) {
-			if (((Coordinate) other).latitude == this.latitude
-					&& ((Coordinate) other).longitude == this.longitude) {
-				return true;
-			}
-		}
-		return false;
+	/**
+	 * @methodtype comparison
+	 */
+	public boolean isEqual(Coordinate other) {
+		return (other != null) && latitude == other.latitude && longitude == other.longitude;
 	}
 	
 	
+	/**
+	 * @methodtype comparison
+	 */
 	@Override
-	public String toString() {
+	public boolean equals(Object other) {
+		return (other instanceof Coordinate) && isEqual((Coordinate)other);
+	}
+	
+	
+	/**
+	 * @methodtype conversion
+	 */
+	public String asString() {
 		return "Coordinate(" + latitude + ", " + longitude + ")";
 	}
 	
