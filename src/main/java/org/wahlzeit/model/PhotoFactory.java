@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  */
 public class PhotoFactory {
 
-	private static final Logger log = Logger.getLogger(PhotoFactory.class.getName());
+	protected static final Logger log = Logger.getLogger(PhotoFactory.class.getName());
 	/**
 	 * Hidden singleton instance; needs to be initialized from the outside.
 	 */
@@ -41,7 +41,7 @@ public class PhotoFactory {
 	protected PhotoFactory() {
 		// do nothing
 	}
-
+	
 	/**
 	 * Hidden singleton instance; needs to be initialized from the outside.
 	 */
