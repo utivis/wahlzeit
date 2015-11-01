@@ -125,7 +125,7 @@ public class Photo extends DataObject {
 	/*
 	 * 
 	 */
-	protected Coordinate location;
+	protected Location location;
 
 	/**
 	 *
@@ -427,14 +427,14 @@ public class Photo extends DataObject {
 	/**
 	 * @methodtype get
 	 */
-	public Coordinate getLocation() {
+	public Location getLocation() {
 		return location;
 	}
 
 	/**
 	 * @methodtype set
 	 */
-	public void setLocation(Coordinate location) {
+	public void setLocation(Location location) {
 		this.location = location;
 	}
 }
