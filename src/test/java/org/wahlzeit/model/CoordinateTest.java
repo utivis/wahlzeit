@@ -46,10 +46,10 @@ public class CoordinateTest {
 	
 	@Test
 	public void testGetDistance() {
-		assertEquals(c1.getDistance(c2), new Coordinate(10, 10));
-		assertEquals(c2.getDistance(c3), new Coordinate(15, 10));
-		assertEquals(c3.getDistance(c4), new Coordinate(120, 84));
-		assertEquals(c4.getDistance(c5), new Coordinate(147, 21));
+		assertTrue(Math.round(c1.getDistance(c2)) == 1570);
+		assertTrue(Math.round(c2.getDistance(c3)) == 1977);
+		assertTrue(Math.round(c3.getDistance(c4)) == 8963);
+		assertTrue(Math.round(c4.getDistance(c5)) == 15769);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)

@@ -8,6 +8,7 @@ public class Coordinate implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -5853691751849512975L;
+	private static final double EARTH_RADIUS_KM = 6378.137;
 	
 	/*
 	 * 
@@ -22,8 +23,8 @@ public class Coordinate implements Serializable {
 	
 	
 	public Coordinate(double latitude, double longitude) {
-		this.latitude = latitude;
-		this.longitude = longitude;
+		setLatitude(latitude);
+		setLongitude(longitude);
 	}
 	
 	
@@ -65,8 +66,13 @@ public class Coordinate implements Serializable {
 	}
 	
 	
-	public Coordinate getDistance(Coordinate other) {
-		return new Coordinate(getLatitudinalDistance(other), getLongitudinalDistance(other));
+	public double getDistance(Coordinate other) {
+		if (other == null) throw new IllegalArgumentException("Other coordiante cannot be null.");
+		double rlat1 = Math.toRadians(latitude);
+		double rlat2 = Math.toRadians(other.latitude);
+		double rlongdiff = Math.toRadians(getLongitudinalDistance(other));
+		double c = Math.acos(Math.sin(rlat1) * Math.sin(rlat2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.cos(rlongdiff));
+		return EARTH_RADIUS_KM * c;
 	}
 	
 	
