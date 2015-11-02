@@ -2,6 +2,9 @@ package org.wahlzeit.model;
 
 import java.util.Date;
 
+import com.googlecode.objectify.annotation.Subclass;
+
+@Subclass(index = true)
 public class PersonPhoto extends Photo {
 	
 	private static final long serialVersionUID = 7021885354590441181L;
@@ -10,8 +13,8 @@ public class PersonPhoto extends Photo {
 	private Location placeOfBirth;
 	private Date dateOfDeath;
 	private Location placeOfDeath;
-	private String field;
-	private String knownFor;
+	private String field = "no field";
+	private String knownFor = "nothing";
 	
 	
 	public PersonPhoto() {

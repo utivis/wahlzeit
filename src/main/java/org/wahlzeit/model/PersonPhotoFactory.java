@@ -12,6 +12,7 @@ public class PersonPhotoFactory extends PhotoFactory {
 	
 	/**
 	 * Hidden singleton instance; needs to be initialized from the outside.
+	 * @methodtype initialization
 	 */
 	public static void initializePersonPhotoFactory() {
 		log.config(LogBuilder.createSystemMessage().addAction("try setting PersonPhotoFactory").toString());
