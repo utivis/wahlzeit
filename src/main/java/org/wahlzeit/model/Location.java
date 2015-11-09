@@ -2,12 +2,14 @@ package org.wahlzeit.model;
 
 import java.io.Serializable;
 
+import com.googlecode.objectify.annotation.Container;
+
 public class Location implements Serializable {
 
 	private static final long serialVersionUID = -3646721611221841315L;
 	
 	private String name;
-	private Coordinate coordinate;
+	@Container private Coordinate coordinate;
 
 	
 	public Location() {
@@ -64,14 +66,6 @@ public class Location implements Serializable {
 		return (other != null) && name.equals(other.name) && coordinate.equals(other.coordinate);
 	}
 	
-	
-	/**
-	 * @methodtype comparison
-	 */
-	@Override
-	public boolean equals(Object other) {
-		return (other instanceof Location) && isEqual((Location)other);
-	}
 	
 	/**
 	 * @methodtype conversion
