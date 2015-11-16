@@ -2,72 +2,40 @@ package org.wahlzeit.model;
 
 import java.io.Serializable;
 
-public class CartesianCoordinate implements Serializable, Coordinate {
+public class CartesianCoordinate extends AbstractCoordinate implements Serializable {
 
 
 	private static final long serialVersionUID = 5147685088635698410L;
-	private static final double DELTA = 0.0001;
 	
-	private double x;
-	private double y;
-	private double z;
+	private double x = 0;
+	private double y = 0;
+	private double z = 0;
+	
+	
+	/**
+	 * @methodtype constructor
+	 */
+	public CartesianCoordinate() {
+		// empty
+	}
+	
+	
+	/**
+	 * @methodtype constructor
+	 */
+	public CartesianCoordinate(double x, double y, double z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
 	
 	
 	/**
 	 * @methodtype constructor
 	 */
 	public CartesianCoordinate(Coordinate other) {
-		if (other instanceof CartesianCoordinate)
-			initializeFromCartesian((CartesianCoordinate)other);
-		else if (other instanceof SphericCoordinate)
-			intitializeFromSpheric((SphericCoordinate)other);
-		else
-			throw new IllegalArgumentException("Cannot convert from given object");
-	}
-	
-	
-	/**
-	 * @methodtype initialization
-	 * @param other
-	 */
-	private void initializeFromCartesian(CartesianCoordinate other) {
-		this.x = other.x;
-		this.y = other.y;
-		this.z = other.z;
-	}
-	
-	
-	/**
-	 * @methodtype initialization
-	 * @param other
-	 */
-	private void intitializeFromSpheric(SphericCoordinate other) {
-		double rlat = Math.toRadians(other.getLatitude());
-		double rlong = Math.toRadians(other.getLongitude());
-		x = other.getRadius() * Math.sin(rlat) * Math.cos(rlong);
-		y = other.getRadius() * Math.sin(rlat) * Math.sin(rlong);
-		z = other.getRadius() * Math.cos(rlat);
-	}
-
-	
-	@Override
-	public double getDistance(Coordinate other) {
 		if (other == null) throw new IllegalArgumentException("Other coordiante cannot be null.");
-		
-		// Convert both coordinates to spheric in order to calculate the distance on the surface of a sphere.
-		// (This would be very diffictult to achieve with cartesian coordinates..)
-		SphericCoordinate sThis = new SphericCoordinate(this);
-		SphericCoordinate sOther = new SphericCoordinate(other);
-		return sThis.getDistance(sOther);
-	}
-	
-
-	@Override
-	public boolean isEqual(Coordinate other) {
-		if (other == null) return false;
-		CartesianCoordinate tmp = new CartesianCoordinate(other);
-		return (Math.abs(x - tmp.x) < DELTA) && (Math.abs(y - tmp.y) < DELTA)
-				&& (Math.abs(z - tmp.z) < DELTA);
+		doUpdateFromSpheric(other.getLatitude(), other.getLongitude(), other.getRadius());
 	}
 	
 	
@@ -124,6 +92,84 @@ public class CartesianCoordinate implements Serializable, Coordinate {
 	 */
 	public void setZ(double z) {
 		this.z = z;
+	}
+
+	
+	/**
+	 * @methodtype basic
+	 */
+	private void doUpdateFromSpheric(double latitude, double longitude, double radius) {
+		double rlat = Math.toRadians(latitude);
+		double rlong = Math.toRadians(longitude);
+		double r = radius;
+		x = r * Math.sin(rlat) * Math.cos(rlong);
+		y = r * Math.sin(rlat) * Math.sin(rlong);
+		z = r * Math.cos(rlat);
+	}
+	
+
+	/**
+	 * @methodtype get
+	 */
+	@Override
+	public double getLatitude() {
+		double px = Math.pow(x, 2);
+		double py = Math.pow(y, 2);
+		double pz = Math.pow(z, 2);
+		if (px + py + pz == 0) return 0;
+		return Math.toDegrees(Math.acos(z / Math.sqrt(px + py + pz)));
+	}
+	
+	
+	/**
+	 * @methodtype set
+	 */
+	@Override
+	public void setLatitude(double latitude) {
+		doUpdateFromSpheric(latitude, getLongitude(), getRadius());
+		
+	}
+
+
+	/**
+	 * @methodtype get
+	 */
+	@Override
+	public double getLongitude() {
+		double px = Math.pow(x, 2);
+		double py = Math.pow(y, 2);
+		if (px + py == 0) return 0;
+		return Math.toDegrees(Math.acos(x / Math.sqrt(px + py)));
+	}
+
+	
+	/**
+	 * @methodtype set
+	 */
+	@Override
+	public void setLongitude(double longitude) {
+		doUpdateFromSpheric(getLatitude(), longitude, getRadius());
+	}
+	
+
+	/**
+	 * @methodtype get
+	 */
+	@Override
+	public double getRadius() {
+		double px = Math.pow(x, 2);
+		double py = Math.pow(y, 2);
+		double pz = Math.pow(z, 2);
+		return Math.sqrt(px + py + pz);
+	}
+
+
+	/**
+	 * @methodtype set
+	 */
+	@Override
+	public void setRadius(double radius) {
+		doUpdateFromSpheric(getLatitude(), getLongitude(), radius);
 	}
 
 }
