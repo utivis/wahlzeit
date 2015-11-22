@@ -48,6 +48,7 @@ public class CoordinateTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetDistanceOnNullArgument2() {
+		assert false;
 		cc1.getDistance(null);
 	}
 	

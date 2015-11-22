@@ -34,8 +34,9 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	 * @methodtype constructor
 	 */
 	public CartesianCoordinate(Coordinate other) {
-		if (other == null) throw new IllegalArgumentException("Other coordiante cannot be null.");
+		assertOtherNotNull(other);
 		doUpdateFromSpheric(other.getLatitude(), other.getLongitude(), other.getRadius());
+		assertClassInvariants();
 	}
 	
 	
@@ -59,7 +60,9 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	 * @methodtype set
 	 */
 	public void setX(double x) {
+		assertXValid(x);
 		this.x = x;
+		assertClassInvariants();
 	}
 
 
@@ -75,7 +78,9 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	 * @methodtype set
 	 */
 	public void setY(double y) {
+		assertYValid(y);
 		this.y = y;
+		assertClassInvariants();
 	}
 
 
@@ -91,7 +96,9 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	 * @methodtype set
 	 */
 	public void setZ(double z) {
+		assertZValid(z);
 		this.z = z;
+		assertClassInvariants();
 	}
 
 	
@@ -105,6 +112,7 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 		x = r * Math.sin(rlat) * Math.cos(rlong);
 		y = r * Math.sin(rlat) * Math.sin(rlong);
 		z = r * Math.cos(rlat);
+		assertClassInvariants();
 	}
 	
 
@@ -126,7 +134,9 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	 */
 	@Override
 	public void setLatitude(double latitude) {
+		assertLatitudeValid(latitude);
 		doUpdateFromSpheric(latitude, getLongitude(), getRadius());
+		assertClassInvariants();
 		
 	}
 
@@ -148,7 +158,9 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	 */
 	@Override
 	public void setLongitude(double longitude) {
+		assertLongitudeValid(longitude);
 		doUpdateFromSpheric(getLatitude(), longitude, getRadius());
+		assertClassInvariants();
 	}
 	
 
@@ -169,7 +181,43 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	 */
 	@Override
 	public void setRadius(double radius) {
+		assertRadiusValid(radius);
 		doUpdateFromSpheric(getLatitude(), getLongitude(), radius);
+		assertClassInvariants();
+	}
+	
+	
+	/**
+	 * @methodtype assertion
+	 */
+	protected void assertClassInvariants() {
+		assertXValid(x);
+		assertYValid(y);
+		assertZValid(z);
+	}
+	
+	
+	/**
+	 * @methodtype assertion
+	 */
+	protected void assertXValid(double x) {
+		assert !Double.isNaN(x);
+	}
+	
+	
+	/**
+	 * @methodtype assertion
+	 */
+	protected void assertYValid(double y) {
+		assert !Double.isNaN(y);
+	}
+	
+	
+	/**
+	 * @methodtype assertion
+	 */
+	protected void assertZValid(double z) {
+		assert !Double.isNaN(z);
 	}
 
 }

@@ -11,10 +11,8 @@ public abstract class AbstractCoordinate implements Coordinate {
 	 */
 	@Override
 	public double getDistance(Coordinate other) {
-		if (other == null) throw new IllegalArgumentException("Other coordiante cannot be null.");
-		
-		if (Math.abs(getRadius() - other.getRadius()) >= DELTA)
-			throw new IllegalArgumentException("Cannot calculate distance - the two points are not located on the same sphere.");
+		assertOtherNotNull(other);
+		assertIsOnSameSphere(other.getRadius());
 		
 		double rlat1 = Math.toRadians(getLatitude());
 		double rlat2 = Math.toRadians(other.getLatitude());
@@ -35,4 +33,51 @@ public abstract class AbstractCoordinate implements Coordinate {
 	}
 	
 
+	/**
+	 * @methodtype assertion
+	 */
+	protected void assertIsOnSameSphere(double otherRadius) {
+		if (Math.abs(getRadius() - otherRadius) >= DELTA)
+			throw new IllegalArgumentException("Cannot calculate distance - the two points are not located on the same sphere.");
+	}
+	
+	
+	/**
+	 * @methodtype assertion
+	 */
+	protected void assertLatitudeValid(double latitude) {
+		assert !Double.isNaN(latitude);
+		if (latitude < -90 || latitude >= 90)
+			throw new IllegalArgumentException("Latitude out of range (-90 to 90)");
+	}
+	
+	
+	/**
+	 * @methodtype assertion
+	 */
+	protected void assertLongitudeValid(double longitude) {
+		assert !Double.isNaN(longitude);
+		if (longitude < -180 || longitude >= 180)
+			throw new IllegalArgumentException("Longitude out of range (-180 to 180)");
+	}
+	
+	
+	/**
+	 * @methodtype assertion
+	 */
+	protected void assertRadiusValid(double radius) {
+		assert !Double.isNaN(radius);
+		if (radius < 0)
+			throw new IllegalArgumentException("Radius out of range (>= 0)");
+	}
+	
+	
+	/**
+	 * @methodtype assertion
+	 */
+	protected void assertOtherNotNull(Coordinate other) {
+		if (other == null)
+			throw new IllegalArgumentException("Other coordiante cannot be null.");
+	}
+	
 }

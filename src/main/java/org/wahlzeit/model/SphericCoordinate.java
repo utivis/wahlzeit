@@ -33,6 +33,7 @@ public class SphericCoordinate extends AbstractCoordinate implements Serializabl
 		setLatitude(latitude);
 		setLongitude(longitude);
 		setRadius(radius);
+		assertClassInvariants();
 	}
 	
 	
@@ -48,10 +49,11 @@ public class SphericCoordinate extends AbstractCoordinate implements Serializabl
 	 * @methodtype constructor
 	 */
 	public SphericCoordinate(Coordinate other) {
-		if (other == null) throw new IllegalArgumentException("Other coordiante cannot be null.");
+		assertOtherNotNull(other);
 		setLatitude(other.getLatitude());
 		setLongitude(other.getLongitude());
 		setRadius(other.getRadius());
+		assertClassInvariants();
 	}
 	
 	
@@ -69,9 +71,9 @@ public class SphericCoordinate extends AbstractCoordinate implements Serializabl
 	 */
 	@Override
 	public void setLatitude(double latitude) {
-		if (latitude < -180 || latitude > 180)
-			throw new IllegalArgumentException("Latitude out of range (-90 to 90)");
+		assertLatitudeValid(latitude);
 		this.latitude = latitude;
+		assertClassInvariants();
 	}
 	
 	
@@ -89,9 +91,9 @@ public class SphericCoordinate extends AbstractCoordinate implements Serializabl
 	 */
 	@Override
 	public void setLongitude(double longitude) {
-		if (longitude < -180 || longitude > 180)
-			throw new IllegalArgumentException("Longitude out of range (-180 to 180)");
+		assertLongitudeValid(longitude);
 		this.longitude = longitude;
+		assertClassInvariants();
 	}
 	
 	
@@ -109,7 +111,9 @@ public class SphericCoordinate extends AbstractCoordinate implements Serializabl
 	 */
 	@Override
 	public void setRadius(double radius) {
+		assertRadiusValid(radius);
 		this.radius = radius;
+		assertClassInvariants();
 	}
 	
 	
@@ -117,7 +121,7 @@ public class SphericCoordinate extends AbstractCoordinate implements Serializabl
 	 * @methodtype query
 	 */
 	public double getLatitudinalDistance(SphericCoordinate other) {
-		if (other == null) throw new IllegalArgumentException("Other coordiante cannot be null.");
+		assertOtherNotNull(other);
 		return Math.abs(latitude - other.latitude);
 	}
 	
@@ -126,7 +130,7 @@ public class SphericCoordinate extends AbstractCoordinate implements Serializabl
 	 * @methodtype query
 	 */
 	public double getLongitudinalDistance(SphericCoordinate other) {
-		if (other == null) throw new IllegalArgumentException("Other coordiante cannot be null.");
+		assertOtherNotNull(other);
 		return Math.abs(longitude - other.longitude);
 	}
 	
@@ -136,6 +140,16 @@ public class SphericCoordinate extends AbstractCoordinate implements Serializabl
 	 */
 	public String asString() {
 		return "SphericCoordinate(" + radius + ", " + latitude + ", " + longitude + ")";
+	}
+	
+	
+	/**
+	 * @methodtype assertion
+	 */
+	protected void assertClassInvariants() {
+		assertLatitudeValid(latitude);
+		assertLongitudeValid(longitude);
+		assertRadiusValid(radius);
 	}
 	
 }
