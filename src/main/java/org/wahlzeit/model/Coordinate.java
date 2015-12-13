@@ -22,7 +22,7 @@ public interface Coordinate extends Serializable {
 	/**
 	 * @methodtype set
 	 */
-	public abstract void setLatitude(double latitude);
+	public abstract Coordinate setLatitude(double latitude);
 	
 	/**
 	 * @methodtype get
@@ -32,7 +32,7 @@ public interface Coordinate extends Serializable {
 	/**
 	 * @methodtype set
 	 */
-	public abstract void setLongitude(double longitude);
+	public abstract Coordinate setLongitude(double longitude);
 	
 	/**
 	 * @methodtype get
@@ -42,6 +42,6 @@ public interface Coordinate extends Serializable {
 	/**
 	 * @methodtype set
 	 */
-	public abstract void setRadius(double radius);
+	public abstract Coordinate setRadius(double radius);
 
 }

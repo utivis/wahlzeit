@@ -1,42 +1,80 @@
 package org.wahlzeit.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class CartesianCoordinate extends AbstractCoordinate implements Serializable {
 
 
 	private static final long serialVersionUID = 5147685088635698410L;
 	
-	private double x = 0;
-	private double y = 0;
-	private double z = 0;
+	private static HashMap<CartesianCoordinate, CartesianCoordinate> instances = new HashMap<>();
+	
+	
+	private final double x;
+	private final double y;
+	private final double z;
 	
 	
 	/**
 	 * @methodtype constructor
 	 */
-	public CartesianCoordinate() {
-		// empty
-	}
-	
-	
-	/**
-	 * @methodtype constructor
-	 */
-	public CartesianCoordinate(double x, double y, double z) {
+	private CartesianCoordinate(double x, double y, double z) {
+		assertXValid(x);
+		assertYValid(y);
+		assertZValid(z);
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		assertClassInvariants();
+	}
+	
+	
+	/**
+	 * @methodtype creation method
+	 */
+	public static CartesianCoordinate getInstance(double x, double y, double z) {
+		CartesianCoordinate tmp = new CartesianCoordinate(x, y, z);
+		synchronized (instances) {
+			if (instances.containsKey(tmp)) {
+				return instances.get(tmp);
+			} else {
+				instances.put(tmp, tmp);
+				return tmp;
+			}
+		}
 	}
 	
 	
 	/**
 	 * @methodtype constructor
 	 */
-	public CartesianCoordinate(Coordinate other) {
+	public static CartesianCoordinate getInstance(Coordinate other) {
 		assertOtherNotNull(other);
-		doUpdateFromSpheric(other.getLatitude(), other.getLongitude(), other.getRadius());
-		assertClassInvariants();
+		assertLatitudeValid(other.getLatitude());
+		assertLongitudeValid(other.getLongitude());
+		assertRadiusValid(other.getRadius());
+		CartesianCoordinate c;
+		if (other instanceof CartesianCoordinate) {
+			c = (CartesianCoordinate)other;
+		} else {
+			c = doCreateFromSpheric(other.getLatitude(), other.getLongitude(), other.getRadius());
+		}
+		return getInstance(c.x, c.y, c.z);
+	}
+	
+	
+	/**
+	 * @methodtype basic
+	 */
+	private static CartesianCoordinate doCreateFromSpheric(double latitude, double longitude, double radius) {
+		double rlat = Math.toRadians(latitude);
+		double rlong = Math.toRadians(longitude);
+		double r = radius;
+		double newX = r * Math.sin(rlat) * Math.cos(rlong);
+		double newY = r * Math.sin(rlat) * Math.sin(rlong);
+		double newZ = r * Math.cos(rlat);
+		return new CartesianCoordinate(newX, newY, newZ);
 	}
 	
 	
@@ -59,10 +97,8 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	/**
 	 * @methodtype set
 	 */
-	public void setX(double x) {
-		assertXValid(x);
-		this.x = x;
-		assertClassInvariants();
+	public Coordinate setX(double x) {
+		return getInstance(x, this.y, this.z);
 	}
 
 
@@ -77,10 +113,8 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	/**
 	 * @methodtype set
 	 */
-	public void setY(double y) {
-		assertYValid(y);
-		this.y = y;
-		assertClassInvariants();
+	public Coordinate setY(double y) {
+		return getInstance(this.x, y, this.z);
 	}
 
 
@@ -95,24 +129,8 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	/**
 	 * @methodtype set
 	 */
-	public void setZ(double z) {
-		assertZValid(z);
-		this.z = z;
-		assertClassInvariants();
-	}
-
-	
-	/**
-	 * @methodtype basic
-	 */
-	private void doUpdateFromSpheric(double latitude, double longitude, double radius) {
-		double rlat = Math.toRadians(latitude);
-		double rlong = Math.toRadians(longitude);
-		double r = radius;
-		x = r * Math.sin(rlat) * Math.cos(rlong);
-		y = r * Math.sin(rlat) * Math.sin(rlong);
-		z = r * Math.cos(rlat);
-		assertClassInvariants();
+	public Coordinate setZ(double z) {
+		return getInstance(this.x, this.y, z);
 	}
 	
 
@@ -133,11 +151,8 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	 * @methodtype set
 	 */
 	@Override
-	public void setLatitude(double latitude) {
-		assertLatitudeValid(latitude);
-		doUpdateFromSpheric(latitude, getLongitude(), getRadius());
-		assertClassInvariants();
-		
+	public Coordinate setLatitude(double latitude) {
+		return getInstance(doCreateFromSpheric(latitude, this.getLongitude(), this.getRadius()));
 	}
 
 
@@ -157,10 +172,8 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	 * @methodtype set
 	 */
 	@Override
-	public void setLongitude(double longitude) {
-		assertLongitudeValid(longitude);
-		doUpdateFromSpheric(getLatitude(), longitude, getRadius());
-		assertClassInvariants();
+	public Coordinate setLongitude(double longitude) {
+		return getInstance(doCreateFromSpheric(this.getLatitude(), longitude, this.getRadius()));
 	}
 	
 
@@ -180,10 +193,8 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	 * @methodtype set
 	 */
 	@Override
-	public void setRadius(double radius) {
-		assertRadiusValid(radius);
-		doUpdateFromSpheric(getLatitude(), getLongitude(), radius);
-		assertClassInvariants();
+	public Coordinate setRadius(double radius) {
+		return getInstance(doCreateFromSpheric(this.getLatitude(), this.getLongitude(), radius));
 	}
 	
 	
@@ -218,6 +229,40 @@ public class CartesianCoordinate extends AbstractCoordinate implements Serializa
 	 */
 	protected void assertZValid(double z) {
 		assert !Double.isNaN(z);
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(x);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(y);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(z);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CartesianCoordinate other = (CartesianCoordinate) obj;
+		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
+			return false;
+		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
+			return false;
+		if (Double.doubleToLongBits(z) != Double.doubleToLongBits(other.z))
+			return false;
+		return true;
 	}
 
 }

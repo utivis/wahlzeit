@@ -45,7 +45,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 	/**
 	 * @methodtype assertion
 	 */
-	protected void assertLatitudeValid(double latitude) {
+	protected static void assertLatitudeValid(double latitude) {
 		assert !Double.isNaN(latitude);
 		if (latitude < -90 || latitude >= 90)
 			throw new IllegalArgumentException("Latitude out of range (-90 to 90)");
@@ -55,7 +55,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 	/**
 	 * @methodtype assertion
 	 */
-	protected void assertLongitudeValid(double longitude) {
+	protected static void assertLongitudeValid(double longitude) {
 		assert !Double.isNaN(longitude);
 		if (longitude < -180 || longitude >= 180)
 			throw new IllegalArgumentException("Longitude out of range (-180 to 180)");
@@ -65,7 +65,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 	/**
 	 * @methodtype assertion
 	 */
-	protected void assertRadiusValid(double radius) {
+	protected static void assertRadiusValid(double radius) {
 		assert !Double.isNaN(radius);
 		if (radius < 0)
 			throw new IllegalArgumentException("Radius out of range (>= 0)");
@@ -75,9 +75,13 @@ public abstract class AbstractCoordinate implements Coordinate {
 	/**
 	 * @methodtype assertion
 	 */
-	protected void assertOtherNotNull(Coordinate other) {
+	protected static void assertOtherNotNull(Coordinate other) {
 		if (other == null)
 			throw new IllegalArgumentException("Other coordiante cannot be null.");
 	}
+	
+	public abstract int hashCode();
+	
+	public abstract boolean equals(Object obj);
 	
 }
