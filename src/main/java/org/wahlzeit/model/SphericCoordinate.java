@@ -82,7 +82,7 @@ public class SphericCoordinate extends AbstractCoordinate implements Serializabl
 	 */
 	@Override
 	public Coordinate setLatitude(double latitude) {
-		return new SphericCoordinate(latitude, this.longitude, this.radius);
+		return getInstance(latitude, this.longitude, this.radius);
 	}
 	
 	
@@ -100,7 +100,7 @@ public class SphericCoordinate extends AbstractCoordinate implements Serializabl
 	 */
 	@Override
 	public Coordinate setLongitude(double longitude) {
-		return new SphericCoordinate(this.latitude, longitude, this.radius);
+		return getInstance(this.latitude, longitude, this.radius);
 	}
 	
 	
@@ -118,7 +118,7 @@ public class SphericCoordinate extends AbstractCoordinate implements Serializabl
 	 */
 	@Override
 	public Coordinate setRadius(double radius) {
-		return new SphericCoordinate(this.latitude, this.longitude, radius);
+		return getInstance(this.latitude, this.longitude, radius);
 	}
 	
 	
