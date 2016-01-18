@@ -10,7 +10,7 @@ public class PersonTypeFactory {
 	}
 	
 	
-	public synchronized PersonTypeFactory getInstance() {
+	public static synchronized PersonTypeFactory getInstance() {
 		if (instance == null) {
 			instance = new PersonTypeFactory();
 		}

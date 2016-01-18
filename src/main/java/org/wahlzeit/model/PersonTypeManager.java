@@ -16,7 +16,7 @@ public class PersonTypeManager extends ObjectManager {
 	}
 	
 	
-	public synchronized PersonTypeManager getInstance() {
+	public static synchronized PersonTypeManager getInstance() {
 		if (instance == null) {
 			instance = new PersonTypeManager();
 		}
@@ -35,13 +35,25 @@ public class PersonTypeManager extends ObjectManager {
 	}
 	
 	
-	public void addPersonType(PersonType personType) {
+	private void doAddPersonType(PersonType personType) {
 		synchronized (personTypes) {
 			if (personTypes.containsValue(personType.getProfession())) {
 				throw new IllegalArgumentException("Person " + personType.getProfession() + " already existant.");
 			}
 			personTypes.put(personType.getProfession(), personType);
 		}
+	}
+	
+	
+	public void addPersonType(PersonType personType) {
+		doAddPersonType(personType);
+	}
+	
+	
+	public PersonType createPersonType(PersonType superType, String profession) {
+		PersonType personType = PersonTypeFactory.getInstance().createPersonType(superType, profession);
+		doAddPersonType(personType);
+		return personType;
 	}
 	
 	
