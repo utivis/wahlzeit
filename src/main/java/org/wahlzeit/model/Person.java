@@ -3,11 +3,17 @@ package org.wahlzeit.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+
+@Entity
 public class Person implements Serializable {
 
 	private static final long serialVersionUID = -5649550494679485718L;
 	
 	private final PersonType type;
+	@Id
+	private final String name;
 	private Date dateOfBirth;
 	private Location placeOfBirth;
 	private Date dateOfDeath;
@@ -15,13 +21,19 @@ public class Person implements Serializable {
 	private String knownFor = "nothing";
 	
 	
-	public Person(PersonType type) {
+	public Person(PersonType type, String name) {
 		this.type = type;
+		this.name = name;
 	}
 	
 	
 	public PersonType getType() {
 		return type;
+	}
+	
+	
+	public String getName() {
+		return name;
 	}
 	
 	
